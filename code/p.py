@@ -1,34 +1,28 @@
 #!/usr/bin/env python3
 
 import csv
+import pandas as pd
 
 filePath = "../data/CometLanding.csv"
 outputfile = "../data/CometLandingCleaned.csv"
 
 ids = set()
 
-def cleanLine(line):
+def cleanData(data):
  
-    valid = True
+    data.drop_duplicates(subset=['status_url'], keep='first')
 
-    id = line.split(",")[0]
+    
 
-    if id in ids or len(id) != 18 or  len(line.split(",")) < 17 :
-        valid = False
-
-    if(valid):
-        ids.add(line.split(",")[0])
-        with open(outputfile, 'a') as output:
-            output.write(line)
             
 def main():
-    open(outputfile, 'w').close()
 
-    landingData = open(filePath)
-    lines = landingData.readlines()
-    
-    for line in lines:
-        cleanLine(line)
+    landingData = pd.read_csv( filePath, header=0)
+
+    cleanData(landingData)
+
+    landingData.to_csv(outputfile, index=False, encoding='utf-8')
+
 
 if __name__ == "__main__":
     main()
