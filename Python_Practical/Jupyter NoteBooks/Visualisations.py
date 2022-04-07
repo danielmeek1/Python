@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 
 import pandas as pd
@@ -15,7 +15,7 @@ import numpy as np
 import re
 
 
-# In[ ]:
+# In[2]:
 
 
 pd.set_option('max_colwidth', 400)
@@ -37,7 +37,7 @@ dfDates = pd.read_csv('./data/Date.csv' , names = ['Dates', 'Frequency'])
 dfPopularApplications = pd.read_csv('./data/applications.csv' , names = ['Applications Used to Send Tweets', 'Frequency Of Applications Used In Numbers'])    
 
 
-# In[ ]:
+# In[3]:
 
 
 ''' This function plots a pie chart for the structure of the dataset (tweets/retweets/replies)'''
@@ -55,10 +55,18 @@ def visualiseStruct(df):
     fig1, ax1 = plt.subplots()
     ax1.pie(proportions, labels = tweetStructs, explode = myExplode, autopct='%1.1f%%', shadow = True)
     ax1.set_title('Structure Of The Dataset')
+    plt.savefig('./images/struct.png')
+    
     plt.show()
 
 
-# In[ ]:
+# In[4]:
+
+
+visualiseStruct(df)
+
+
+# In[5]:
 
 
 ''' This function plots the word cloud of all hashtags in the dataset '''
@@ -66,28 +74,65 @@ def visualiseStruct(df):
 #https://www.analyticsvidhya.com/blog/2021/05/how-to-build-word-cloud-in-python/
 
 def createWordCloud(dfHashtags):
-    
-    data = ''
-    
-    for (columnName, columnData) in dfHashtags['Hashtags'].iteritems():  
-        data += " " + columnData +" "      
+    df = dfHashtags['Hashtags'].value_counts()
     
     stopwords = set(STOPWORDS)
     
     wordcloud = WordCloud(width = 800, height = 800,
                           background_color='white',
                           stopwords= stopwords,
-                          min_font_size = 10).generate(data)
+                          min_font_size = 10).generate_from_frequencies(df)
 
     plt.figure(figsize = (8, 8), facecolor = None)
     plt.imshow(wordcloud)
     plt.axis("off")
     plt.tight_layout(pad = 0)
- 
+    plt.savefig('./images/wordCloud.png')
+    
     plt.show()
+    
 
 
-# In[ ]:
+# In[6]:
+
+
+createWordCloud(dfHashtags)
+
+
+# In[7]:
+
+
+''' This function plots the word cloud of all hashtags in the dataset '''
+#https://www.geeksforgeeks.org/generating-word-cloud-python
+#https://www.analyticsvidhya.com/blog/2021/05/how-to-build-word-cloud-in-python/
+
+def createWordCloudCI(dfHashtagsCI):
+    df = dfHashtagsCI['Hashtags'].value_counts()
+    
+    stopwords = set(STOPWORDS)
+    
+    wordcloud = WordCloud(width = 800, height = 800,
+                          background_color='white',
+                          stopwords= stopwords,
+                          min_font_size = 10).generate_from_frequencies(df)
+
+    plt.figure(figsize = (8, 8), facecolor = None)
+    plt.imshow(wordcloud)
+    plt.axis("off")
+    plt.tight_layout(pad = 0)
+    plt.savefig('./images/wordCloudCI.png')
+    
+    plt.show()
+    
+
+
+# In[8]:
+
+
+createWordCloudCI(dfHashtagsCI)
+
+
+# In[9]:
 
 
 #https://www.geeksforgeeks.org/bar-plot-in-matplotlib/
@@ -110,10 +155,18 @@ def plotTweetsPerDay(dfDays):
     plt.xlabel("Days Of The Week")
     plt.ylabel("Frequency Of Tweets In Logarithmic Scale (Base 10)")
     plt.title("Tweet Frequency During Rosetta’s Philae Lander On Different Days Of The Week")
+    plt.savefig('./images/tweetsPerDay.png')
+    
     plt.show()
 
 
-# In[ ]:
+# In[10]:
+
+
+plotTweetsPerDay(dfDays)
+
+
+# In[11]:
 
 
 #https://www.geeksforgeeks.org/bar-plot-in-matplotlib/
@@ -141,10 +194,19 @@ def plotTweetsPerDate(dfDates):
     plt.xlabel("Dates Of The Year")
     plt.ylabel("Frequency Of Tweets In Logarithmic Scale (Base 10)")
     plt.title("Tweet Frequency During Rosetta’s Philae Lander On Different Dates Of The Year")
+    plt.savefig('./images/tweetsPerDate.png')
+    
     plt.show()
+   
 
 
-# In[ ]:
+# In[12]:
+
+
+plotTweetsPerDate(dfDates)
+
+
+# In[13]:
 
 
 #https://www.geeksforgeeks.org/matplotlib-pyplot-scatter-in-python/
@@ -163,10 +225,18 @@ def plotTweetsPerHours(dfHours):
     fig.update_traces(marker=dict(size=12, line=dict(width=2,color='Red')),
                       selector=dict(mode='markers'))
     
+    fig.write_image("./images/tweetsPerHours.png")
     fig.show()
+    
 
 
-# In[ ]:
+# In[14]:
+
+
+plotTweetsPerHours(dfHours)
+
+
+# In[15]:
 
 
 #https://www.geeksforgeeks.org/matplotlib-pyplot-scatter-in-python/
@@ -183,10 +253,19 @@ def plotPopularApplications(dfPopularApplications):
     fig.update_traces(marker=dict(size=12, line=dict(width=2,color='Red')),
                       selector=dict(mode='markers'))
     
+    fig.write_image("./images/populatApplications.png")
+    
     fig.show()
+    
 
 
-# In[ ]:
+# In[16]:
+
+
+plotPopularApplications(dfPopularApplications)
+
+
+# In[17]:
 
 
 def plotAllCharts():
@@ -198,8 +277,8 @@ def plotAllCharts():
     plotPopularApplications(dfPopularApplications)
 
 
-# In[ ]:
+# In[18]:
 
 
-plotAllCharts()
+#plotAllCharts()
 
