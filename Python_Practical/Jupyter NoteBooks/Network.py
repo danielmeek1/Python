@@ -27,7 +27,7 @@ def getDifferentUsers(df):
     return (list(differentUsers))
 
 
-# In[7]:
+# In[4]:
 
 
 ''' This function returns the lists for the edges in the network '''
@@ -72,27 +72,37 @@ def getEdgesOfRetweets(df):
     return retweetEdges, mentionsEdges, repliesEdges
 
 
-# In[8]:
+# In[5]:
 
 
 ''' This function returns the graph built from the nodes and edges returned from the functions above. '''
 def drawNetwork(df):
+    
+    df = df.head(1000)
+    
     nodes = []
-    nodes = da.getNumberOfDifferentUsers(df)
+    nodes = getDifferentUsers(df)
+    
+    #nodes = map(lambda x: (x,{'size':100}),nodes)
     
     retweetEdges, mentionsEdges, repliesEdges = getEdgesOfRetweets(df)
     
-    G = nx.Graph()
-    G.add_nodes_from(nodes)
-    G.add_edges_from(retweetEdges)
-    G.add_edges_from(mentionsEdges)
-    G.add_edges_from(repliesEdges)
+    #retweetEdges = map(lambda x: (x,{'thickness':10}),retweetEdges)
+    #mentionsEdges = map(lambda x: (x,{'thickness':20}),mentionsEdges)
+    #repliesEdges = map(lambda x: (x,{'thickness':5}),repliesEdges)
+    
+    g = nx.Graph()
+    g.add_nodes_from(nodes)
+    g.add_edges_from(retweetEdges)
+    g.add_edges_from(mentionsEdges)
+    g.add_edges_from(mentionsEdges)
+    
+    nx.draw(g,node_size = 10,width=1,with_labels=False)
+    plt.savefig('./images/network.png')
+    plt.show()
 
-    nx.draw_networkx(G)
-    plt.show() 
 
-
-# In[9]:
+# In[6]:
 
 
 drawNetwork(df)
@@ -101,5 +111,13 @@ drawNetwork(df)
 # In[ ]:
 
 
+def main():
 
+    pd.set_option('max_colwidth', 400)
+    df = pd.read_csv('./data/CleanedCometLanding.csv')
+    drawNetwork(df)
+    
+
+if __name__ == "__main__":
+    main()
 

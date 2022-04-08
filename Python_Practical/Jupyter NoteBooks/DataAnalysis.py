@@ -10,18 +10,28 @@ import collections
 import csv
 
 
+# # Data Analysis Justifications
+# 
+# From the beginning, we always reminded ourselves this project is a data analysis project. We wanted to have a pipeline where the data would go through to generate the end result. Therefore we seperated the project into 3 parts. Data Refinement, Data Analysis, and Data Representation(Visualisation). 
+# 
+# In data analysis, our goal is to extract the knowledge and feed it to the next pipeline which is visualisation. While we do print the results of our data analysis which can be argued to be the data representation part, we believe this is necessary due to the relatively simple nature of this practical in the world of data science. We believe in real life applications, the knowledge would often require more delivery methods to aid learning such as graphs.
+# 
+# This is the reasoning why we save most of the data to seperate csv files which then can be utilized by the visualisation module.
+# 
+# Once again, we have utilized the twitter API to utilize the data better.
+# We identified 4 different types of tweets these are:
+# 
+# Source:https://help.twitter.com/en/using-twitter/types-of-tweets
+# 1-Mentions
+# 2-Replies
+# 3-General Tweets
+# 4-Retweets
+# 
+# While the practical specification only requires tweets, retweets, and replies to be analyzed, we extended the data analysis by seperating mentions from retweets as the nature of information they convey is different.  
+# 
+# 
+
 # In[2]:
-
-
-#Different Types Of Tweets
-#Source:https://help.twitter.com/en/using-twitter/types-of-tweets
-#1-Mentions
-#2-Replies
-#3-General Tweets
-#4-Retweets
-
-
-# In[3]:
 
 
 #Reads in the refined data to perform data analysis
@@ -29,7 +39,7 @@ pd.set_option('max_colwidth', 400)
 df = pd.read_csv('./data/CleanedCometLanding.csv')
 
 
-# In[4]:
+# In[3]:
 
 
 ''' This function returns the number of mention tweets'''
@@ -49,7 +59,7 @@ def getNumberOfMentionTweets(df):
     return counter
 
 
-# In[5]:
+# In[4]:
 
 
 #https://www.geeksforgeeks.org/loop-or-iterate-over-all-or-certain-columns-of-a-dataframe-in-python-pandas/
@@ -69,11 +79,10 @@ def getNumberOfRetweets(df):
         
 
 
-# In[6]:
+# In[5]:
 
 
 ''' This function returns the number of reply tweets '''
-
 #Source:https://developer.twitter.com/en/docs/twitter-api/v1/data-dictionary/object-model/tweet
 def getNumberOfReplies(df):
      
@@ -83,7 +92,7 @@ def getNumberOfReplies(df):
     
 
 
-# In[7]:
+# In[6]:
 
 
 ''' This function returns the number of general tweets'''
@@ -96,7 +105,7 @@ def getNumberOfGeneralTweets(df):
     return  NumberOfGeneralTweets
 
 
-# In[8]:
+# In[7]:
 
 
 ''' This function returns total number of tweets'''
@@ -104,7 +113,7 @@ def getTotalNumberOfTweets(df):
     return len(df)
 
 
-# In[9]:
+# In[8]:
 
 
 ''' This function returns the number of different users in the dataset'''
@@ -113,29 +122,34 @@ def getNumberOfDifferentUsers(df):
     return len(differentUsers)
 
 
-# In[10]:
+# We decided to extend the calculate the average number of tweets, retweets and replies sent by a user requirement with calculating the average number of followers per user and calculating the average number of friends per user in order to gain a more representative idea about the population who interacted with this event. This gives an idea about whether people who interacted with this event was popular in twitter community.  
+
+# In[9]:
 
 
-''' This function analyses the basic user behaviour''' 
-''' The function prints the average number of tweets, replies, mentions, and retweets sent by a user '''
+''' This function prints data about the average user who interacted with this event''' 
 def basicUserInteractionAnalysis(df):
     differentUsers = getNumberOfDifferentUsers(df)
     averageGeneralTweetsPerUser = getNumberOfGeneralTweets(df) / differentUsers
     averageMentionsPerUser = getNumberOfMentionTweets(df) / differentUsers
     averageRetweetsPerUser = getNumberOfRetweets(df) / differentUsers
     averageRepliesPerUser = getNumberOfReplies(df) / differentUsers
+    averageFollowersPerUser = getTotalNumberOfUserFollowers(df) / differentUsers
+    averageFriendsPerUser = getTotalNumberOfUserFollowers(df) / differentUsers
     
     print("The average number of general tweets per user is:", averageGeneralTweetsPerUser)
     print("The average number of mentions tweets per user is:", averageMentionsPerUser)
     print("The average number of retweets per user is:", averageRetweetsPerUser)
     print("The average number of replies per user is:", averageRepliesPerUser)
+    print("The average number of followers per user is:", averageFollowersPerUser)
+    print("The average number of friends per user is:", averageFriendsPerUser)
     
 
 
-# In[11]:
+# In[10]:
 
 
-''' This function prints the 5 most populat hashtag in the dataset''' 
+''' This function prints the 5 most popular hashtags in the dataset''' 
 ''' This function also saves all hashtags to another file for visualisation''' 
 def getMostPopularHashtags(df):
     hashtags = [] 
@@ -154,7 +168,9 @@ def getMostPopularHashtags(df):
     return counter.most_common(5)
 
 
-# In[12]:
+# We believe it is important to have case insensitivity while analysing the hashtags because it will yield results where hashtags mean contextually different things and this can increase our undertstanding about the data
+
+# In[11]:
 
 
 ''' This function prints the 5 most popular hashtag in the dataset'''
@@ -179,12 +195,11 @@ def getMostPopularCaseInsensitiveHashtags(df):
             
 
 
-# In[13]:
+# In[12]:
 
 
-''' This function '''
-# Each time data is in user's local time, adjusting time data 
-# to reference data from a single point of source(such as GMT) is not
+''' This function returns data about the popular times , days, and dates that the tweets were sent at'''
+# Each time data is in user's local time, adjusting time data to be represented in one unit (such as GMT) is not
 # possible for this practical since timezones were not provided in the given CSV file
 
 def getTweetDataAboutTime(df):
@@ -226,6 +241,52 @@ def getTweetDataAboutTime(df):
     newDataFrame = pd.DataFrame(counterDates.most_common(5))
     newDataFrame.to_csv('./data/Date.csv',index = False , header=False)
     
+
+
+# In[13]:
+
+
+'''This function returns the most popular user language'''
+#While twitter supports 34 languages, we focused on the most commonly spoken languages for the scope of this practical
+#elif structure assures no unnecessary checks were made
+def getTweetDataAboutLanguage(df):
+    languages = [] 
+    languageColumn = df['user_lang']
+    
+    englishPattern = 'en'
+    frenchPattern = 'fr'
+    germanPattern = 'de'
+    spanishPattern = 'es'
+    chinesePattern = 'zh-cn'
+    
+    for (columnName, columnData) in languageColumn.iteritems():  
+        matchList1 = re.search(englishPattern , str(columnData))
+        matchList2 = re.search(frenchPattern , str(columnData))
+        matchList3 = re.search(germanPattern , str(columnData))
+        matchList4 = re.search(spanishPattern , str(columnData))
+        matchList5 = re.search(chinesePattern , str(columnData))
+        
+        if matchList1 != None:
+            languages.append('English')
+        elif matchList2 != None:
+            languages.append('French')
+        elif matchList3 != None:
+            languages.append('German')
+        elif matchList4 != None:
+            languages.append('Spanish')
+        elif matchList5 != None:
+            languages.append('Chinese')
+        else:
+            languages.append('Other')
+        
+        
+    counterLanguages = collections.Counter(languages)
+        
+    newDataFrame = pd.DataFrame(counterLanguages.most_common(5))
+    newDataFrame.to_csv('./data/Languages.csv',index = False, header=False)
+        
+    
+        
 
 
 # In[14]:
@@ -276,6 +337,20 @@ def getMostPopularApplicationsUsed(df):
 # In[16]:
 
 
+def getTotalNumberOfUserFollowers(df):
+    return (df['user_followers_count'].sum())
+
+
+# In[17]:
+
+
+def getTotalNumbersOfUserFriends(df):
+    return (df['user_friends_count'].sum())
+
+
+# In[18]:
+
+
 def performDataAnalysis(df):
     print ('The number of mention tweets is' , getNumberOfMentionTweets(df))
     print ('The number of retweets is' , getNumberOfRetweets(df))
@@ -287,18 +362,26 @@ def performDataAnalysis(df):
     print('5 most popular hashtags with their respective occurances are',getMostPopularHashtags(df))
     print('5 contextually different most popular hashtags with their respective occurances are' 
           ,getMostPopularCaseInsensitiveHashtags(df))
-    getTweetDataAboutTime(df)
     print('5 most popular apps to send tweets are', getMostPopularApplicationsUsed(df))
+    getTweetDataAboutTime(df)
+    getTweetDataAboutLanguage(df)
 
 
-# In[17]:
+# In[19]:
 
 
 performDataAnalysis(df)
 
 
-# In[ ]:
+# In[20]:
 
 
+def main():
 
+    pd.set_option('max_colwidth', 400)
+    df = pd.read_csv('./data/CleanedCometLanding.csv')
+    performDataAnalysis(df)
+
+if __name__ == "__main__":
+    main()
 

@@ -25,13 +25,13 @@ df = pd.read_csv('./data/CometLanding.csv')
 # 
 # In order to refine the data, we first had to know the structure of the data. Therefore, we did research on the Twitter API through resources Twitter provides for developers. After this research process, we have identified the dataset structure and we have defined functions that would check whether the data we were given is in the specified structure. 
 # 
-# It's our view that any tweet data that doesn't follow the tweet structure can not be viewed as a valid tweet and it can't be trusted. Therefore, to achieve correctness in data analysis we have removed the data that was inconsistent with the structure from our dataset. 
+# It's our view that any tweet data that doesn't follow the tweet structure can not be viewed as a valid tweet and it can't be trusted. Therefore, to achieve correctness in data analysis, we have removed the data that was inconsistent with the structure from our dataset. 
 # 
 # In this project, we focused on reproducibility so that our project would be able to analyze any tweet data no matter what the context is. Therefore, we completely avoided doing any kind of manual checking. All of the functions we have defined in data refinement work on tweet objects which are universal to any tweet data. 
 # 
-# Furthermore, it was also crucial for us to have a repetable code to make sure that we minimize unnecessary frictions and distractions during our development process to avoid having bugs in our code. Hence, we organized the functions according to what tweet object the function works on. 
+# Furthermore, it was also crucial for us to have a repetable code to make sure that we minimize unnecessary frictions and distractions during our development process. This also ensured we were able to avoid having bugs that are hard to debug in our code. Hence, we organized the functions according to what tweet object the function works on, and we have used commenting that explains how the function is supposed to work. 
 # 
-# Lastly, this structuring of our code alongside using very well known and robust frameworks such as pandas makes sure the code can be used in other settings with minimal change.
+# Lastly, the structuring of our code alongside using very well known and robust frameworks such as pandas makes sure the code can be used in other settings with minimal change. We will talk more about why we structured our code in the way we did in data analysis.
 # 
 
 # In[4]:
@@ -141,12 +141,13 @@ refineDataset(df)
 # In[12]:
 
 
-#def main():
-    #77319 rows × 17 columns original data
-    #df = pd.read_csv('CometLanding.csv')
-    #refineDataset(df)
+def main():
+
+    pd.set_option('max_colwidth', 400)
+    df = pd.read_csv('CometLanding.csv')
+    refineDataset(df)
     
 
-#if __name__ == "__main__":
-    #main()
+if __name__ == "__main__":
+    main()
 

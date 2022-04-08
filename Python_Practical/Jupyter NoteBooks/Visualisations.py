@@ -15,7 +15,13 @@ import numpy as np
 import re
 
 
-# In[ ]:
+# # Data Visualisation Justifications
+# 
+# Data visualisation is the end of the pipeline where we start to make sense of what the data actually tells us. In our graphs, we paid attention to have information that is presented accurately. Also, we made sure our data would present the information clearly. For example, in certain occasions the data had a big range. Therefore, we adjusted the y axis to use logarithmic scale. 
+# 
+# Moreover, we have also utilized dynamic plots where the user can interact with the visualistion and manipulate axes in a way that would be desired. In these plots, one of our goal was to present data in different ways to further aid understanding of that information. For example, rather than just using a number to represent the frequency, we made the data point bigger or in different colours. 
+
+# In[2]:
 
 
 pd.set_option('max_colwidth', 400)
@@ -32,12 +38,14 @@ dfHours = pd.read_csv('./data/Hours.csv' , names = ['Hour of the day in the 24 H
 
 dfDays = pd.read_csv('./data/Days.csv' , names = ['Days', 'Frequency'])
 
+dfLanguages = pd.read_csv('./data/Languages.csv' , names = ['Languages', 'Frequency'])
+
 dfDates = pd.read_csv('./data/Date.csv' , names = ['Dates', 'Frequency'])
 
 dfPopularApplications = pd.read_csv('./data/applications.csv' , names = ['Applications Used to Send Tweets', 'Frequency Of Applications Used In Numbers'])    
 
 
-# In[ ]:
+# In[3]:
 
 
 ''' This function plots a pie chart for the structure of the dataset (tweets/retweets/replies)'''
@@ -60,13 +68,47 @@ def visualiseStruct(df):
     plt.show()
 
 
-# In[ ]:
+# In[4]:
 
 
 visualiseStruct(df)
 
 
-# In[ ]:
+# In[5]:
+
+
+#https://www.geeksforgeeks.org/bar-plot-in-matplotlib/
+def visualiseLanguageDistribution(dfLanguages):
+    
+    sortedDataFrame= dfLanguages.sort_values('Frequency')
+    data = sortedDataFrame.set_index('Languages')['Frequency'].to_dict()
+    
+    Languages = list(data.keys())
+    frequency = list(data.values())
+        
+    
+    fig = plt.figure(figsize = (10, 5))
+ 
+    # creating the bar plot
+    plt.bar(Languages, frequency, color ='maroon',
+        width = 0.4)
+    
+
+    plt.xlabel("Different Languages of the Users")
+    plt.ylabel("Frequency Of Tweets In Numbers")
+    plt.title("Distribution Of User Language During Rosetta’s Philae Lander")
+    plt.savefig('./images/languageDistribution.png')
+    
+    plt.show()
+
+
+# In[6]:
+
+
+visualiseLanguageDistribution(dfLanguages)
+
+
+# In[7]:
 
 
 ''' This function plots the word cloud of all hashtags in the dataset '''
@@ -93,13 +135,13 @@ def createWordCloud(dfHashtags):
     
 
 
-# In[ ]:
+# In[8]:
 
 
 createWordCloud(dfHashtags)
 
 
-# In[ ]:
+# In[9]:
 
 
 ''' This function plots the word cloud of all hashtags in the dataset '''
@@ -126,13 +168,13 @@ def createWordCloudCI(dfHashtagsCI):
     
 
 
-# In[ ]:
+# In[10]:
 
 
 createWordCloudCI(dfHashtagsCI)
 
 
-# In[ ]:
+# In[11]:
 
 
 #https://www.geeksforgeeks.org/bar-plot-in-matplotlib/
@@ -160,13 +202,13 @@ def plotTweetsPerDay(dfDays):
     plt.show()
 
 
-# In[ ]:
+# In[12]:
 
 
 plotTweetsPerDay(dfDays)
 
 
-# In[ ]:
+# In[13]:
 
 
 #https://www.geeksforgeeks.org/bar-plot-in-matplotlib/
@@ -200,13 +242,13 @@ def plotTweetsPerDate(dfDates):
    
 
 
-# In[ ]:
+# In[14]:
 
 
 plotTweetsPerDate(dfDates)
 
 
-# In[ ]:
+# In[15]:
 
 
 #https://www.geeksforgeeks.org/matplotlib-pyplot-scatter-in-python/
@@ -230,13 +272,13 @@ def plotTweetsPerHours(dfHours):
     
 
 
-# In[ ]:
+# In[16]:
 
 
 plotTweetsPerHours(dfHours)
 
 
-# In[ ]:
+# In[17]:
 
 
 #https://www.geeksforgeeks.org/matplotlib-pyplot-scatter-in-python/
@@ -259,13 +301,13 @@ def plotPopularApplications(dfPopularApplications):
     
 
 
-# In[ ]:
+# In[18]:
 
 
 plotPopularApplications(dfPopularApplications)
 
 
-# In[ ]:
+# In[19]:
 
 
 def plotAllCharts():
@@ -275,10 +317,34 @@ def plotAllCharts():
     plotTweetsPerDate(dfDates)
     plotTweetsPerHours(dfHours)
     plotPopularApplications(dfPopularApplications)
+    visualiseLanguageDistribution(dfLanguages)
 
 
-# In[ ]:
+# In[20]:
 
 
-#plotAllCharts()
+def main():
+
+    pd.set_option('max_colwidth', 400)
+    df = pd.read_csv('./data/CleanedCometLanding.csv')
+
+    dfHashtags = pd.read_csv('./data/Hashtags.csv', names = ['Hashtags'])
+    dfHashtags.drop(index=0)
+
+    dfHashtagsCI = pd.read_csv('./data/HashtagsCI.csv', names = ['Hashtags'])
+    dfHashtagsCI.drop(index=0)
+
+    dfHours = pd.read_csv('./data/Hours.csv' , names = ['Hour of the day in the 24 Hour Format', 'Frequency Of Tweets In Numbers'])
+
+    dfDays = pd.read_csv('./data/Days.csv' , names = ['Days', 'Frequency'])
+
+    dfDates = pd.read_csv('./data/Date.csv' , names = ['Dates', 'Frequency'])
+    
+    dfLanguages = pd.read_csv('./data/Languages.csv' , names = ['Languages', 'Frequency'])
+
+    dfPopularApplications = pd.read_csv('./data/applications.csv' , names = ['Applications Used to Send Tweets', 'Frequency Of Applications Used In Numbers'])    
+    plotAllCharts()
+
+if __name__ == "__main__":
+    main()
 
