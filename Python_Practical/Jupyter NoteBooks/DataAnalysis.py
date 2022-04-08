@@ -8,7 +8,6 @@ import pandas as pd
 import re
 import collections
 import csv
-#Sentiment Analysis
 
 
 # In[2]:
@@ -40,10 +39,10 @@ def getNumberOfMentionTweets(df):
     
     for (columnName, columnData) in textColumn.iteritems():
 
-        match = re.search('RT @' , columnData)
+        match = re.search('RT @' , str(columnData))
         
         if match == None:
-            match = re.search('@' , columnData)
+            match = re.search('@' , str(columnData))
             if match != None:
                 counter = counter + 1
                     
@@ -61,7 +60,7 @@ def getNumberOfRetweets(df):
     
     for (columnName, columnData) in textColumn.iteritems():
 
-        match = re.search('RT @' , columnData)
+        match = re.search('RT @' , str(columnData))
         
         if match != None:
             counter = counter + 1
@@ -144,7 +143,7 @@ def getMostPopularHashtags(df):
     mentionPattern = '@([a-zA-Z]+)'
     
     for (columnName, columnData) in textColumn.iteritems():  
-        matchList = re.findall(mentionPattern , columnData)
+        matchList = re.findall(mentionPattern , str(columnData))
         hashtags.extend(matchList)
     
     counter = collections.Counter(hashtags)
@@ -164,10 +163,10 @@ def getMostPopularCaseInsensitiveHashtags(df):
     hashtags = [] 
     textColumn = df['text']
     textColumn = textColumn.str.lower()
-    mentionPattern = '@([a-zA-Z]+)'
+    mentionPattern = r'@([a-zA-Z]+)'
     
     for (columnName, columnData) in textColumn.iteritems():  
-        matchList = re.findall(mentionPattern , columnData)
+        matchList = re.findall(mentionPattern , str(columnData))
         hashtags.extend(matchList)
     
         
@@ -198,11 +197,11 @@ def getTweetDataAboutTime(df):
     patternForHours = r'([01]\d|2[0-3]):([0-5]\d):([0-5]\d)'
     patternForDays = r'^Mon|Tue|Wed|Thu|Fri|Sat|Sun$'
     patternForDates = r'(3[01]|[12][0-9]|0[1-9])/(1[0-2]|0[1-9])/([0-9]{4})'
-    #dd/mm/yyyy/[0-9]{4}$'
+    
     
     for (columnName, columnData) in createdAtColumn.iteritems():  
-        hoursList_tuple = re.findall(patternForHours , columnData )
-        daysList  = re.findall(patternForDays, columnData )
+        hoursList_tuple = re.findall(patternForHours , str(columnData))
+        daysList  = re.findall(patternForDays, str(columnData ))
         days.extend(daysList)
         hoursList.extend(hoursList_tuple)
     
@@ -210,7 +209,7 @@ def getTweetDataAboutTime(df):
     hours = [x[0] for x in hoursList]
       
     for (columnName, columnData) in timeColumn.iteritems():  
-        dateList = re.findall(patternForDates , columnData)
+        dateList = re.findall(patternForDates , str(columnData))
         dates.extend(dateList)
        
         

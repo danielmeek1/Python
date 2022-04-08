@@ -15,7 +15,7 @@ import numpy as np
 import re
 
 
-# In[2]:
+# In[ ]:
 
 
 pd.set_option('max_colwidth', 400)
@@ -37,7 +37,7 @@ dfDates = pd.read_csv('./data/Date.csv' , names = ['Dates', 'Frequency'])
 dfPopularApplications = pd.read_csv('./data/applications.csv' , names = ['Applications Used to Send Tweets', 'Frequency Of Applications Used In Numbers'])    
 
 
-# In[3]:
+# In[ ]:
 
 
 ''' This function plots a pie chart for the structure of the dataset (tweets/retweets/replies)'''
@@ -60,13 +60,13 @@ def visualiseStruct(df):
     plt.show()
 
 
-# In[4]:
+# In[ ]:
 
 
 visualiseStruct(df)
 
 
-# In[5]:
+# In[ ]:
 
 
 ''' This function plots the word cloud of all hashtags in the dataset '''
@@ -93,13 +93,13 @@ def createWordCloud(dfHashtags):
     
 
 
-# In[6]:
+# In[ ]:
 
 
 createWordCloud(dfHashtags)
 
 
-# In[7]:
+# In[ ]:
 
 
 ''' This function plots the word cloud of all hashtags in the dataset '''
@@ -126,13 +126,13 @@ def createWordCloudCI(dfHashtagsCI):
     
 
 
-# In[8]:
+# In[ ]:
 
 
 createWordCloudCI(dfHashtagsCI)
 
 
-# In[9]:
+# In[ ]:
 
 
 #https://www.geeksforgeeks.org/bar-plot-in-matplotlib/
@@ -160,13 +160,13 @@ def plotTweetsPerDay(dfDays):
     plt.show()
 
 
-# In[10]:
+# In[ ]:
 
 
 plotTweetsPerDay(dfDays)
 
 
-# In[11]:
+# In[ ]:
 
 
 #https://www.geeksforgeeks.org/bar-plot-in-matplotlib/
@@ -200,13 +200,13 @@ def plotTweetsPerDate(dfDates):
    
 
 
-# In[12]:
+# In[ ]:
 
 
 plotTweetsPerDate(dfDates)
 
 
-# In[13]:
+# In[ ]:
 
 
 #https://www.geeksforgeeks.org/matplotlib-pyplot-scatter-in-python/
@@ -230,13 +230,13 @@ def plotTweetsPerHours(dfHours):
     
 
 
-# In[14]:
+# In[ ]:
 
 
 plotTweetsPerHours(dfHours)
 
 
-# In[15]:
+# In[ ]:
 
 
 #https://www.geeksforgeeks.org/matplotlib-pyplot-scatter-in-python/
@@ -259,13 +259,13 @@ def plotPopularApplications(dfPopularApplications):
     
 
 
-# In[16]:
+# In[ ]:
 
 
 plotPopularApplications(dfPopularApplications)
 
 
-# In[17]:
+# In[ ]:
 
 
 def plotAllCharts():
@@ -277,7 +277,7 @@ def plotAllCharts():
     plotPopularApplications(dfPopularApplications)
 
 
-# In[18]:
+# In[ ]:
 
 
 #plotAllCharts()
