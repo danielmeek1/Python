@@ -34,7 +34,7 @@ df = pd.read_csv('./data/CleanedCometLanding.csv')
 
 ''' This function returns the number of mention tweets'''
 def getNumberOfMentionTweets(df): 
-    counter = 0;
+    counter = 0
     textColumn = df['text']
     
     for (columnName, columnData) in textColumn.iteritems():
